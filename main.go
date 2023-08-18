@@ -7,26 +7,6 @@ import (
 	"github.com/gofiber/template/html/v2"
 )
 
-type Contact struct {
-	Name string
-	Age  int
-}
-
-// TODO: implement contacts struct -> create json db?
-// https://github.com/bigskysoftware/contact-app/blob/master/contacts_model.py#L92
-type Contacts struct{}
-
-func (c *Contacts) all() ([]Contact, error) {
-	return []Contact{
-		{
-			Name: "Jonas",
-			Age:  36,
-		},
-	}, nil
-}
-
-// func (c *Contacts) search() {}
-
 func main() {
 	engine := html.New("./views", ".html")
 
@@ -34,27 +14,48 @@ func main() {
 		Views: engine,
 	})
 
+	db, err := OpenDatabase()
+	if err != nil {
+		panic(err.Error())
+	}
+
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Redirect("/contacts", fiber.StatusTemporaryRedirect)
 	})
 
 	app.Get("/contacts", func(c *fiber.Ctx) error {
-		contacts_data := []Contact{}
-		contacts := Contacts{}
+		// hans := &Contact{
+		// 	ID:     uuid.New(),
+		// 	First:  "Peter",
+		// 	Last:   "Stein",
+		// 	Phone:  "071 124 45 67",
+		// 	Email:  "peter@mail.ch",
+		// 	Errors: []error{},
+		// }
 
-		search := c.Query("q")
-		if search != "" {
-			all, err := contacts.all()
+		// db.Save(hans)
+
+		foundContacts := []Contact{}
+
+		query := c.Query("q")
+		if query != "" {
+			found, err := db.Search(query)
+
 			if err != nil {
 				return fmt.Errorf("error getting contacts: %s", err.Error())
 			}
 
-			contacts_data = all
+			foundContacts = found
+		}
+
+		if query == "" {
+			all, _ := db.All()
+			foundContacts = all
 		}
 
 		return c.Render("contacts", fiber.Map{
 			"Title":    "Contacts",
-			"Contacts": contacts_data,
+			"Contacts": foundContacts,
 		}, "layouts/main")
 	})
 
