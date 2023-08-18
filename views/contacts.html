@@ -1,9 +1,9 @@
 {{ template "header"}}
-<h2>{{ .Title }}</h2>
+<h2>Title: {{ .Title }}</h2>
 
-{{ if .Person}}
-<h3>Person</h3>
-{{ template "person" .Person}} {{end}}
+{{if .Contacts}}
+<h3>Contacts</h3>
+{{ range .Contacts}} {{ template "contact" .}} {{end}} {{end}}
 
 <p>
   Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, quaerat minus
