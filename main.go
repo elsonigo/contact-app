@@ -56,6 +56,7 @@ func main() {
 		return c.Render("contacts", fiber.Map{
 			"Title":    "Contacts",
 			"Contacts": foundContacts,
+			"Query":    query,
 		}, "layouts/main")
 	})
 

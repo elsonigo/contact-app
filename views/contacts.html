@@ -1,11 +1,26 @@
 {{ template "header"}}
 <h2>Title: {{ .Title }}</h2>
 
+<form action="/contacts" method="get">
+  <label for="search">Search Term</label>
+  <input id="search" type="search" name="q" value="{{.Query}}" />
+  <input type="submit" value="Search" />
+</form>
+
 {{if .Contacts}}
 <h3>Contacts</h3>
-{{ range .Contacts}} {{ template "contact" .}} {{end}} {{end}}
-
-<p>
-  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, quaerat minus
-  id quae expedita quam doloribus eveniet libero autem quod.
-</p>
+<table>
+  <thead>
+    <tr>
+      <th>First</th>
+      <th>Last</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .Contacts}} {{ template "contact" .}} {{end}}
+  </tbody>
+</table>
+{{end}}
