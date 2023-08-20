@@ -18,7 +18,7 @@ func main() {
 
 	db, err := OpenDatabase()
 	if err != nil {
-		panic(err.Error())
+		panic(err)
 	}
 
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -45,10 +45,13 @@ func main() {
 		}
 
 		return c.Render("contacts", fiber.Map{
-			"Title":    "Contacts",
 			"Contacts": foundContacts,
 			"Query":    query,
 		}, "layouts/main")
+	})
+
+	app.Get("/contacts/new", func(c *fiber.Ctx) error {
+		return c.Render("new", fiber.Map{}, "layouts/main")
 	})
 
 	app.Listen(":3000")

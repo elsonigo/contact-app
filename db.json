@@ -5,7 +5,9 @@
     "last": "Muster",
     "phone": "071 123 45 67",
     "email": "hans@mail.ch",
-    "errors": []
+    "errors": {
+      "email": "email error"
+    }
   },
   {
     "id": "89f1ea45-917d-468a-8cf7-37ee4f9fb173",
@@ -13,6 +15,8 @@
     "last": "Stein",
     "phone": "071 124 45 67",
     "email": "peter@mail.ch",
-    "errors": []
+    "errors": {
+      "email": "email error"
+    }
   }
 ]
