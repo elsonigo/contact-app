@@ -54,5 +54,25 @@ func main() {
 		return c.Render("new", fiber.Map{}, "layouts/main")
 	})
 
+	app.Post("/contacts/new", func(c *fiber.Ctx) error {
+		newContact := &Contact{
+			Email: c.FormValue("email"),
+			First: c.FormValue("first"),
+			Last:  c.FormValue("last"),
+			Phone: c.FormValue("phone"),
+		}
+
+		ct, err := db.Save(newContact)
+		if err != nil {
+			// implement flash message
+			// https://www.alexedwards.net/blog/simple-flash-messages-in-golang
+			return c.Render("new", fiber.Map{
+				"Contact": ct,
+			}, "layouts/main")
+		}
+
+		return c.Redirect("/contacts")
+	})
+
 	app.Listen(":3000")
 }

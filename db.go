@@ -11,11 +11,11 @@ import (
 
 type Contact struct {
 	ID     uuid.UUID         `json:"id"`
-	First  string            `json:"first"`
-	Last   string            `json:"last"`
-	Phone  string            `json:"phone"`
 	Email  string            `json:"email"`
-	Errors map[string]string `json:"errors"`
+	First  string            `json:"first,omitempty"`
+	Last   string            `json:"last,omitempty"`
+	Phone  string            `json:"phone,omitempty"`
+	Errors map[string]string `json:"errors,omitempty"`
 }
 
 // https://github.com/bigskysoftware/contact-app/blob/master/contacts_model.py#L92
@@ -45,11 +45,42 @@ func OpenDatabase() (*Database, error) {
 	}, nil
 }
 
-func (db *Database) Save(contact *Contact) error {
-	db.contacts = append(db.contacts, *contact)
-	saveToFile(db.contacts)
+func (db *Database) Save(contact *Contact) (*Contact, error) {
+	contact.ID = uuid.New()
 
-	return nil
+	validated := db.validate(contact)
+
+	if validated.Errors != nil {
+		return validated, errors.New("invalid contact")
+	}
+
+	db.contacts = append(db.contacts, *validated)
+	err := saveToFile(db.contacts)
+	if err != nil {
+		return validated, err
+	}
+
+	return validated, nil
+}
+
+func (db *Database) validate(contact *Contact) *Contact {
+	if contact.Email == "" {
+		contact.Errors = map[string]string{
+			"email": "Email required.",
+		}
+
+		return contact
+	}
+
+	for _, c := range db.contacts {
+		if c.Email == contact.Email {
+			contact.Errors = map[string]string{
+				"email": "Email already taken.",
+			}
+		}
+	}
+
+	return contact
 }
 
 func saveToFile(contacts []Contact) error {

@@ -11,8 +11,8 @@
         placeholder="Email"
         value="{{ .Email }}"
       />
-      {{ if .Errors }}
-      <span class="error"> {{ index .Errors "email" }} </span>
+      {{ if .Contact.Errors }}
+      <span class="error"> {{ index .Contact.Errors "email" }} </span>
       {{ end }}
     </p>
     <p>
@@ -24,8 +24,8 @@
         placeholder="First Name"
         value="{{ .First }}"
       />
-      {{ if .Errors }}
-      <span class="error"> {{ index .Errors "first" }} </span>
+      {{ if .Contact.Errors }}
+      <span class="error"> {{ index .Contact.Errors "first" }} </span>
       {{ end }}
     </p>
     <p>
@@ -37,8 +37,8 @@
         placeholder="Last Name"
         value="{{ .Last }}"
       />
-      {{ if .Errors }}
-      <span class="error"> {{ index .Errors "last" }} </span>
+      {{ if .Contact.Errors }}
+      <span class="error"> {{ index .Contact.Errors "last" }} </span>
       {{ end }}
     </p>
     <p>
@@ -50,8 +50,8 @@
         placeholder="Phone"
         value="{{ .Phone }}"
       />
-      {{ if .Errors }}
-      <span class="error"> {{ index .Errors "phone" }} </span>
+      {{ if .Contact.Errors }}
+      <span class="error"> {{ index .Contact.Errors "phone" }} </span>
       {{ end }}
     </p>
     <button>Save</button>
