@@ -1,7 +1,5 @@
 {{ template "header"}}
-<h2>Title: {{ .Title }}</h2>
-
-<form action="/contacts" method="get">
+<form action="/contacts" method="get" class="tool-bar">
   <label for="search">Search Term</label>
   <input id="search" type="search" name="q" value="{{.Query}}" />
   <input type="submit" value="Search" />
@@ -23,4 +21,8 @@
     {{ range .Contacts}} {{ template "contact" .}} {{end}}
   </tbody>
 </table>
+
+<p>
+  <a href="/contacts/new">Add Contact</a>
+</p>
 {{end}}

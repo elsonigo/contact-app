@@ -14,6 +14,8 @@ func main() {
 		Views: engine,
 	})
 
+	app.Static("/static", "./static")
+
 	db, err := OpenDatabase()
 	if err != nil {
 		panic(err.Error())
@@ -24,17 +26,6 @@ func main() {
 	})
 
 	app.Get("/contacts", func(c *fiber.Ctx) error {
-		// hans := &Contact{
-		// 	ID:     uuid.New(),
-		// 	First:  "Peter",
-		// 	Last:   "Stein",
-		// 	Phone:  "071 124 45 67",
-		// 	Email:  "peter@mail.ch",
-		// 	Errors: []error{},
-		// }
-
-		// db.Save(hans)
-
 		foundContacts := []Contact{}
 
 		query := c.Query("q")
