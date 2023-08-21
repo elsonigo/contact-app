@@ -127,5 +127,27 @@ func main() {
 		return c.Redirect("/contacts")
 	})
 
+	app.Post("/contacts/:id/delete", func(c *fiber.Ctx) error {
+		contact, err := db.Find(c.Params("id"))
+		if contact.Email == "" || err != nil {
+
+			if err != nil {
+				flash.Set(c, err.Error())
+			}
+
+			return c.Redirect("/contacts")
+		}
+
+		err = db.Delete(contact)
+		if err != nil {
+			flash.Set(c, err.Error())
+			return c.Redirect("/contacts")
+		}
+
+		flash.Set(c, "contact deleted")
+
+		return c.Redirect("/contacts")
+	})
+
 	app.Listen(":3000")
 }
