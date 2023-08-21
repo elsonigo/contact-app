@@ -19,10 +19,12 @@ func main() {
 
 	app.Static("/static", "./static")
 
-	db, err := OpenDatabase()
+	db, err := OpenJsonDatabase()
 	if err != nil {
 		panic(err)
 	}
+
+	cs := NewContactService(db)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Redirect("/contacts", fiber.StatusTemporaryRedirect)
@@ -33,7 +35,7 @@ func main() {
 
 		query := c.Query("q")
 		if query != "" {
-			found, err := db.Search(query)
+			found, err := cs.Search(query)
 
 			if err != nil {
 				return fmt.Errorf("error getting contacts: %s", err.Error())
@@ -43,7 +45,7 @@ func main() {
 		}
 
 		if query == "" {
-			all, _ := db.All()
+			all, _ := cs.All()
 			foundContacts = all
 		}
 
@@ -68,7 +70,7 @@ func main() {
 			Phone: c.FormValue("phone"),
 		}
 
-		ct, err := db.Save(newContact)
+		ct, err := cs.Save(newContact)
 		if err != nil {
 			return c.Render("new", fiber.Map{
 				"Contact": ct,
@@ -81,7 +83,7 @@ func main() {
 	})
 
 	app.Get("/contacts/:id", func(c *fiber.Ctx) error {
-		contact, err := db.Find(c.Params("id"))
+		contact, err := cs.Find(c.Params("id"))
 		if contact.Email == "" || err != nil {
 			flash.Set(c, "could not find contact")
 			return c.Redirect("/contacts")
@@ -93,7 +95,7 @@ func main() {
 	})
 
 	app.Get("/contacts/:id/edit", func(c *fiber.Ctx) error {
-		contact, err := db.Find(c.Params("id"))
+		contact, err := cs.Find(c.Params("id"))
 		if contact.Email == "" || err != nil {
 			flash.Set(c, "could not find contact")
 			return c.Redirect("/contacts")
@@ -105,7 +107,7 @@ func main() {
 	})
 
 	app.Post("/contacts/:id/edit", func(c *fiber.Ctx) error {
-		contact, err := db.Find(c.Params("id"))
+		contact, err := cs.Find(c.Params("id"))
 		if contact == nil || err != nil {
 			return c.Redirect("/contacts")
 		}
@@ -115,7 +117,7 @@ func main() {
 		contact.Last = c.FormValue("last_name")
 		contact.Phone = c.FormValue("phone")
 
-		ct, err := db.Update(contact)
+		ct, err := cs.Update(contact)
 		if err != nil {
 			return c.Render("edit", fiber.Map{
 				"Contact": ct,
@@ -128,12 +130,12 @@ func main() {
 	})
 
 	app.Post("/contacts/:id/delete", func(c *fiber.Ctx) error {
-		contact, err := db.Find(c.Params("id"))
+		contact, err := cs.Find(c.Params("id"))
 		if contact == nil || err != nil {
 			return c.Redirect("/contacts")
 		}
 
-		err = db.Delete(contact)
+		err = cs.Delete(contact)
 		if err != nil {
 			flash.Set(c, err.Error())
 			return c.Redirect("/contacts")

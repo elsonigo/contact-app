@@ -19,16 +19,24 @@ type Contact struct {
 }
 
 // https://github.com/bigskysoftware/contact-app/blob/master/contacts_model.py#L92
+type ContactRepo interface {
+	Save(*Contact) (*Contact, error)
+	Update(*Contact) (*Contact, error)
+	All() ([]*Contact, error)
+	Search(string) ([]*Contact, error)
+	Delete(*Contact) error
+	Find(string) (*Contact, error)
+}
 
-type Database struct {
+type JsonDatabase struct {
 	contacts []*Contact
 }
 
-func OpenDatabase() (*Database, error) {
+func OpenJsonDatabase() (*JsonDatabase, error) {
 	data, err := os.ReadFile("db.json")
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
-			return &Database{}, nil
+			return &JsonDatabase{}, nil
 		}
 
 		return nil, err
@@ -40,50 +48,21 @@ func OpenDatabase() (*Database, error) {
 		return nil, err
 	}
 
-	return &Database{
+	return &JsonDatabase{
 		contacts: contacts,
 	}, nil
 }
 
-func (db *Database) Save(contact *Contact) (*Contact, error) {
-	contact.ID = uuid.New()
+var _ ContactRepo = &JsonDatabase{}
 
-	validated := db.validate(contact)
-
-	if validated.Errors != nil {
-		return validated, errors.New("invalid contact")
-	}
-
-	db.contacts = append(db.contacts, validated)
+func (db *JsonDatabase) Save(contact *Contact) (*Contact, error) {
+	db.contacts = append(db.contacts, contact)
 	err := saveToFile(db.contacts)
 	if err != nil {
-		return validated, err
+		return contact, err
 	}
 
-	return validated, nil
-}
-
-func (db *Database) validate(contact *Contact) *Contact {
-	if contact.Email == "" {
-		contact.Errors = map[string]string{
-			"email": "Email required.",
-		}
-
-		return contact
-	}
-
-	for _, c := range db.contacts {
-		if c.Email == contact.Email {
-			contact.Errors = map[string]string{
-				"email": "Email already taken.",
-			}
-		}
-	}
-
-	// reset errors on struct just in case
-	contact.Errors = nil
-
-	return contact
+	return contact, nil
 }
 
 func saveToFile(contacts []*Contact) error {
@@ -96,7 +75,7 @@ func saveToFile(contacts []*Contact) error {
 	return nil
 }
 
-func (db *Database) All() ([]*Contact, error) {
+func (db *JsonDatabase) All() ([]*Contact, error) {
 	if db.contacts == nil {
 		return nil, nil
 	}
@@ -104,7 +83,7 @@ func (db *Database) All() ([]*Contact, error) {
 	return db.contacts, nil
 }
 
-func (db *Database) Search(q string) ([]*Contact, error) {
+func (db *JsonDatabase) Search(q string) ([]*Contact, error) {
 	if q == "" {
 		return nil, errors.New("no query string given")
 	}
@@ -137,7 +116,7 @@ func (db *Database) Search(q string) ([]*Contact, error) {
 	return results, nil
 }
 
-func (db *Database) Delete(contact *Contact) error {
+func (db *JsonDatabase) Delete(contact *Contact) error {
 	for i, con := range db.contacts {
 		if con.ID == contact.ID {
 			if len(db.contacts) == i+1 {
@@ -155,13 +134,7 @@ func (db *Database) Delete(contact *Contact) error {
 	return errors.New("could not delete contact, no such contact found")
 }
 
-func (db *Database) Update(contact *Contact) (*Contact, error) {
-	validated := db.validate(contact)
-
-	if validated.Errors != nil {
-		return validated, errors.New("invalid contact")
-	}
-
+func (db *JsonDatabase) Update(contact *Contact) (*Contact, error) {
 	for i, con := range db.contacts {
 		if con.ID == contact.ID {
 			db.contacts[i] = contact
@@ -173,7 +146,7 @@ func (db *Database) Update(contact *Contact) (*Contact, error) {
 	return nil, errors.New("could not update contact, no such contact found")
 }
 
-func (db *Database) Find(id string) (*Contact, error) {
+func (db *JsonDatabase) Find(id string) (*Contact, error) {
 	parsed, err := uuid.Parse(id)
 	if err != nil {
 		return nil, errors.New("invalid id provided")
