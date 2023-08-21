@@ -11,7 +11,8 @@ func main() {
 	engine := html.New("./views", ".html")
 
 	app := fiber.New(fiber.Config{
-		Views: engine,
+		Views:       engine,
+		ViewsLayout: "layouts/main",
 	})
 
 	flash := NewFlash()
@@ -52,18 +53,18 @@ func main() {
 			"Contacts": foundContacts,
 			"Query":    query,
 			"Flash":    f,
-		}, "layouts/main")
+		})
 	})
 
 	app.Get("/contacts/new", func(c *fiber.Ctx) error {
-		return c.Render("new", fiber.Map{}, "layouts/main")
+		return c.Render("new", fiber.Map{})
 	})
 
 	app.Post("/contacts/new", func(c *fiber.Ctx) error {
 		newContact := &Contact{
 			Email: c.FormValue("email"),
-			First: c.FormValue("first"),
-			Last:  c.FormValue("last"),
+			First: c.FormValue("first_name"),
+			Last:  c.FormValue("last_name"),
 			Phone: c.FormValue("phone"),
 		}
 
@@ -71,7 +72,7 @@ func main() {
 		if err != nil {
 			return c.Render("new", fiber.Map{
 				"Contact": ct,
-			}, "layouts/main")
+			})
 		}
 
 		flash.Set(c, "new contact created")
@@ -88,7 +89,7 @@ func main() {
 
 		return c.Render("show", fiber.Map{
 			"Contact": contact,
-		}, "layouts/main")
+		})
 	})
 
 	app.Listen(":3000")

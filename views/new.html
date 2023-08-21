@@ -9,6 +9,7 @@
         type="email"
         placeholder="Email"
         value="{{ .Email }}"
+        required
       />
       {{ if .Contact.Errors }}
       <span class="error"> {{ index .Contact.Errors "email" }} </span>
