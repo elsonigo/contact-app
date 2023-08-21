@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/elsonigo/contact-app/domain"
 	"github.com/elsonigo/contact-app/repositories/json_db"
 	"github.com/elsonigo/contact-app/services/contactsrv"
@@ -40,7 +38,7 @@ func main() {
 			found, err := cs.Search(query)
 
 			if err != nil {
-				return fmt.Errorf("error getting contacts: %s", err.Error())
+				return err
 			}
 
 			foundContacts = found
