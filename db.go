@@ -163,3 +163,18 @@ func (db *Database) Update(contact *Contact) error {
 
 	return errors.New("could not update contact, no such contact found")
 }
+
+func (db *Database) Find(id string) (Contact, error) {
+	parsed, err := uuid.Parse(id)
+	if err != nil {
+		return Contact{}, errors.New("invalid id provided")
+	}
+
+	for _, c := range db.contacts {
+		if c.ID == parsed {
+			return c, nil
+		}
+	}
+
+	return Contact{}, nil
+}

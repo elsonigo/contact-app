@@ -79,5 +79,17 @@ func main() {
 		return c.Redirect("/contacts")
 	})
 
+	app.Get("/contacts/:id", func(c *fiber.Ctx) error {
+		contact, err := db.Find(c.Params("id"))
+		if contact.Email == "" || err != nil {
+			flash.Set(c, "could not find contact")
+			return c.Redirect("/contacts")
+		}
+
+		return c.Render("show", fiber.Map{
+			"Contact": contact,
+		}, "layouts/main")
+	})
+
 	app.Listen(":3000")
 }
