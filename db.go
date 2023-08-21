@@ -155,16 +155,22 @@ func (db *Database) Delete(contact *Contact) error {
 	return errors.New("could not delete contact, no such contact found")
 }
 
-func (db *Database) Update(contact *Contact) error {
+func (db *Database) Update(contact *Contact) (*Contact, error) {
+	validated := db.validate(contact)
+
+	if validated.Errors != nil {
+		return validated, errors.New("invalid contact")
+	}
+
 	for i, con := range db.contacts {
 		if con.ID == contact.ID {
 			db.contacts[i] = contact
 			saveToFile(db.contacts)
-			return nil
+			return contact, nil
 		}
 	}
 
-	return errors.New("could not update contact, no such contact found")
+	return nil, errors.New("could not update contact, no such contact found")
 }
 
 func (db *Database) Find(id string) (*Contact, error) {

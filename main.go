@@ -92,5 +92,40 @@ func main() {
 		})
 	})
 
+	app.Get("/contacts/:id/edit", func(c *fiber.Ctx) error {
+		contact, err := db.Find(c.Params("id"))
+		if contact.Email == "" || err != nil {
+			flash.Set(c, "could not find contact")
+			return c.Redirect("/contacts")
+		}
+
+		return c.Render("edit", fiber.Map{
+			"Contact": contact,
+		})
+	})
+
+	app.Post("/contacts/:id/edit", func(c *fiber.Ctx) error {
+		contact, err := db.Find(c.Params("id"))
+		if contact.Email == "" || err != nil {
+			return c.Redirect("/contacts")
+		}
+
+		contact.Email = c.FormValue("email")
+		contact.First = c.FormValue("first_name")
+		contact.Last = c.FormValue("last_name")
+		contact.Phone = c.FormValue("phone")
+
+		ct, err := db.Update(contact)
+		if err != nil {
+			return c.Render("edit", fiber.Map{
+				"Contact": ct,
+			})
+		}
+
+		flash.Set(c, "contact updated")
+
+		return c.Redirect("/contacts")
+	})
+
 	app.Listen(":3000")
 }
