@@ -80,6 +80,9 @@ func (db *Database) validate(contact *Contact) *Contact {
 		}
 	}
 
+	// reset errors on struct just in case
+	contact.Errors = nil
+
 	return contact
 }
 

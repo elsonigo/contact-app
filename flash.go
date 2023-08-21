@@ -11,7 +11,7 @@ type Flash struct {
 	store *session.Store
 }
 
-func NewFlash() *Flash {
+func InitFlash() *Flash {
 	return &Flash{
 		store: session.New(),
 	}

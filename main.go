@@ -15,7 +15,7 @@ func main() {
 		ViewsLayout: "layouts/main",
 	})
 
-	flash := NewFlash()
+	flash := InitFlash()
 
 	app.Static("/static", "./static")
 
