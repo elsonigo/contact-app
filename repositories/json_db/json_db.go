@@ -129,12 +129,12 @@ func (db *JsonDatabase) Update(contact *domain.Contact) (*domain.Contact, error)
 	return nil, errors.New("could not update contact, no such contact found")
 }
 
-func (db *JsonDatabase) Find(id uuid.UUID) (*domain.Contact, error) {
+func (db *JsonDatabase) Find(id uuid.UUID) *domain.Contact {
 	for _, c := range db.contacts {
 		if c.ID == id {
-			return c, nil
+			return c
 		}
 	}
 
-	return nil, nil
+	return nil
 }

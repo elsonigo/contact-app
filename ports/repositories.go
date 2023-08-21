@@ -11,5 +11,5 @@ type ContactRepo interface {
 	All() ([]*domain.Contact, error)
 	Search(string) ([]*domain.Contact, error)
 	Delete(*domain.Contact) error
-	Find(uuid.UUID) (*domain.Contact, error)
+	Find(uuid.UUID) *domain.Contact
 }

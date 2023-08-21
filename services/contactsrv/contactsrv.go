@@ -77,10 +77,10 @@ func (cs *ContactService) Delete(contact *domain.Contact) error {
 	return cs.repo.Delete(contact)
 }
 
-func (cs *ContactService) Find(id string) (*domain.Contact, error) {
+func (cs *ContactService) Find(id string) *domain.Contact {
 	parsed, err := uuid.Parse(id)
 	if err != nil {
-		return nil, errors.New("invalid id provided")
+		return nil
 	}
 
 	return cs.repo.Find(parsed)

@@ -83,8 +83,8 @@ func main() {
 	})
 
 	app.Get("/contacts/:id", func(c *fiber.Ctx) error {
-		contact, err := cs.Find(c.Params("id"))
-		if contact.Email == "" || err != nil {
+		contact := cs.Find(c.Params("id"))
+		if contact == nil {
 			flash.Set(c, "could not find contact")
 			return c.Redirect("/contacts")
 		}
@@ -95,8 +95,8 @@ func main() {
 	})
 
 	app.Get("/contacts/:id/edit", func(c *fiber.Ctx) error {
-		contact, err := cs.Find(c.Params("id"))
-		if contact.Email == "" || err != nil {
+		contact := cs.Find(c.Params("id"))
+		if contact == nil {
 			flash.Set(c, "could not find contact")
 			return c.Redirect("/contacts")
 		}
@@ -107,8 +107,8 @@ func main() {
 	})
 
 	app.Post("/contacts/:id/edit", func(c *fiber.Ctx) error {
-		contact, err := cs.Find(c.Params("id"))
-		if contact == nil || err != nil {
+		contact := cs.Find(c.Params("id"))
+		if contact == nil {
 			return c.Redirect("/contacts")
 		}
 
@@ -130,8 +130,8 @@ func main() {
 	})
 
 	app.Post("/contacts/:id/delete", func(c *fiber.Ctx) error {
-		contact, err := cs.Find(c.Params("id"))
-		if contact == nil || err != nil {
+		contact := cs.Find(c.Params("id"))
+		if contact == nil {
 			return c.Redirect("/contacts")
 		}
 
