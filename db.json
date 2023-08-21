@@ -12,13 +12,5 @@
     "first": "Peter",
     "last": "Stein",
     "phone": "071 124 45 67"
-  },
-  {
-    "id": "e9012e8a-0cf8-4c3b-b54b-28f520e1b823",
-    "email": "maria@mail.ch"
-  },
-  {
-    "id": "7f10142f-f352-43fe-8e98-e7dd204a368f",
-    "email": "hans@mail2.ch"
   }
 ]
