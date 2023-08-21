@@ -1,4 +1,4 @@
-module github.com/elsonigo/hypermediasystems
+module github.com/elsonigo/contact-app
 
 go 1.20
 

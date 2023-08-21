@@ -1,7 +1,7 @@
 package ports
 
 import (
-	"github.com/elsonigo/hypermediasystems/domain"
+	"github.com/elsonigo/contact-app/domain"
 	"github.com/google/uuid"
 )
 

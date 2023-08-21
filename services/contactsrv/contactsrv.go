@@ -3,8 +3,8 @@ package contactsrv
 import (
 	"errors"
 
-	"github.com/elsonigo/hypermediasystems/domain"
-	"github.com/elsonigo/hypermediasystems/ports"
+	"github.com/elsonigo/contact-app/domain"
+	"github.com/elsonigo/contact-app/ports"
 	"github.com/google/uuid"
 )
 

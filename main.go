@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/elsonigo/hypermediasystems/domain"
-	"github.com/elsonigo/hypermediasystems/repositories/json_db"
-	"github.com/elsonigo/hypermediasystems/services/contactsrv"
+	"github.com/elsonigo/contact-app/domain"
+	"github.com/elsonigo/contact-app/repositories/json_db"
+	"github.com/elsonigo/contact-app/services/contactsrv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 )
