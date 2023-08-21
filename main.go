@@ -106,7 +106,7 @@ func main() {
 
 	app.Post("/contacts/:id/edit", func(c *fiber.Ctx) error {
 		contact, err := db.Find(c.Params("id"))
-		if contact.Email == "" || err != nil {
+		if contact == nil || err != nil {
 			return c.Redirect("/contacts")
 		}
 
@@ -129,12 +129,7 @@ func main() {
 
 	app.Post("/contacts/:id/delete", func(c *fiber.Ctx) error {
 		contact, err := db.Find(c.Params("id"))
-		if contact.Email == "" || err != nil {
-
-			if err != nil {
-				flash.Set(c, err.Error())
-			}
-
+		if contact == nil || err != nil {
 			return c.Redirect("/contacts")
 		}
 
