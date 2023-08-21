@@ -11,7 +11,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// https://github.com/bigskysoftware/contact-app/blob/master/contacts_model.py#L92
 type JsonDatabase struct {
 	contacts []*domain.Contact
 }
