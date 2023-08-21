@@ -9,25 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type Contact struct {
-	ID     uuid.UUID         `json:"id"`
-	Email  string            `json:"email"`
-	First  string            `json:"first,omitempty"`
-	Last   string            `json:"last,omitempty"`
-	Phone  string            `json:"phone,omitempty"`
-	Errors map[string]string `json:"errors,omitempty"`
-}
-
 // https://github.com/bigskysoftware/contact-app/blob/master/contacts_model.py#L92
-type ContactRepo interface {
-	Save(*Contact) (*Contact, error)
-	Update(*Contact) (*Contact, error)
-	All() ([]*Contact, error)
-	Search(string) ([]*Contact, error)
-	Delete(*Contact) error
-	Find(string) (*Contact, error)
-}
-
 type JsonDatabase struct {
 	contacts []*Contact
 }
