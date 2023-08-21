@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 
+	"github.com/elsonigo/hypermediasystems/domain"
+	"github.com/elsonigo/hypermediasystems/repositories/json_db"
+	"github.com/elsonigo/hypermediasystems/services/contactsrv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 )
@@ -15,23 +18,22 @@ func main() {
 		ViewsLayout: "layouts/main",
 	})
 
-	flash := InitFlash()
-
 	app.Static("/static", "./static")
 
-	db, err := OpenJsonDatabase()
+	flash := InitFlash()
+
+	json_db, err := json_db.OpenJsonDatabase()
 	if err != nil {
 		panic(err)
 	}
-
-	cs := NewContactService(db)
+	cs := contactsrv.NewContactService(json_db)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Redirect("/contacts", fiber.StatusTemporaryRedirect)
 	})
 
 	app.Get("/contacts", func(c *fiber.Ctx) error {
-		foundContacts := []*Contact{}
+		foundContacts := []*domain.Contact{}
 
 		query := c.Query("q")
 		if query != "" {
@@ -63,7 +65,7 @@ func main() {
 	})
 
 	app.Post("/contacts/new", func(c *fiber.Ctx) error {
-		newContact := &Contact{
+		newContact := &domain.Contact{
 			Email: c.FormValue("email"),
 			First: c.FormValue("first_name"),
 			Last:  c.FormValue("last_name"),

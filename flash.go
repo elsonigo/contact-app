@@ -20,7 +20,7 @@ func InitFlash() *Flash {
 func (f *Flash) Get(c *fiber.Ctx) (string, error) {
 	sess, err := f.store.Get(c)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	message := sess.Get("flash")
@@ -30,7 +30,7 @@ func (f *Flash) Get(c *fiber.Ctx) (string, error) {
 
 	err = sess.Destroy()
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	return fmt.Sprintf("%s", message), nil
