@@ -29,7 +29,7 @@ func main() {
 	})
 
 	app.Get("/contacts", func(c *fiber.Ctx) error {
-		foundContacts := []Contact{}
+		foundContacts := []*Contact{}
 
 		query := c.Query("q")
 		if query != "" {

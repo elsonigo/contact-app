@@ -21,7 +21,7 @@ type Contact struct {
 // https://github.com/bigskysoftware/contact-app/blob/master/contacts_model.py#L92
 
 type Database struct {
-	contacts []Contact
+	contacts []*Contact
 }
 
 func OpenDatabase() (*Database, error) {
@@ -34,7 +34,7 @@ func OpenDatabase() (*Database, error) {
 		return nil, err
 	}
 
-	contacts := []Contact{}
+	contacts := []*Contact{}
 	err = json.Unmarshal(data, &contacts)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (db *Database) Save(contact *Contact) (*Contact, error) {
 		return validated, errors.New("invalid contact")
 	}
 
-	db.contacts = append(db.contacts, *validated)
+	db.contacts = append(db.contacts, validated)
 	err := saveToFile(db.contacts)
 	if err != nil {
 		return validated, err
@@ -83,7 +83,7 @@ func (db *Database) validate(contact *Contact) *Contact {
 	return contact
 }
 
-func saveToFile(contacts []Contact) error {
+func saveToFile(contacts []*Contact) error {
 	marshalledJson, _ := json.MarshalIndent(contacts, "", "  ")
 	err := os.WriteFile("db.json", marshalledJson, 0644)
 	if err != nil {
@@ -93,20 +93,20 @@ func saveToFile(contacts []Contact) error {
 	return nil
 }
 
-func (db *Database) All() ([]Contact, error) {
+func (db *Database) All() ([]*Contact, error) {
 	if db.contacts == nil {
-		return []Contact{}, nil
+		return nil, nil
 	}
 
 	return db.contacts, nil
 }
 
-func (db *Database) Search(q string) ([]Contact, error) {
+func (db *Database) Search(q string) ([]*Contact, error) {
 	if q == "" {
 		return nil, errors.New("no query string given")
 	}
 
-	results := []Contact{}
+	results := []*Contact{}
 	query := strings.ToLower(q)
 
 	for _, contact := range db.contacts {
@@ -155,7 +155,7 @@ func (db *Database) Delete(contact *Contact) error {
 func (db *Database) Update(contact *Contact) error {
 	for i, con := range db.contacts {
 		if con.ID == contact.ID {
-			db.contacts[i] = *contact
+			db.contacts[i] = contact
 			saveToFile(db.contacts)
 			return nil
 		}
@@ -164,10 +164,10 @@ func (db *Database) Update(contact *Contact) error {
 	return errors.New("could not update contact, no such contact found")
 }
 
-func (db *Database) Find(id string) (Contact, error) {
+func (db *Database) Find(id string) (*Contact, error) {
 	parsed, err := uuid.Parse(id)
 	if err != nil {
-		return Contact{}, errors.New("invalid id provided")
+		return nil, errors.New("invalid id provided")
 	}
 
 	for _, c := range db.contacts {
@@ -176,5 +176,5 @@ func (db *Database) Find(id string) (Contact, error) {
 		}
 	}
 
-	return Contact{}, nil
+	return nil, nil
 }
