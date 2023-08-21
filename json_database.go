@@ -128,14 +128,9 @@ func (db *JsonDatabase) Update(contact *Contact) (*Contact, error) {
 	return nil, errors.New("could not update contact, no such contact found")
 }
 
-func (db *JsonDatabase) Find(id string) (*Contact, error) {
-	parsed, err := uuid.Parse(id)
-	if err != nil {
-		return nil, errors.New("invalid id provided")
-	}
-
+func (db *JsonDatabase) Find(id uuid.UUID) (*Contact, error) {
 	for _, c := range db.contacts {
-		if c.ID == parsed {
+		if c.ID == id {
 			return c, nil
 		}
 	}

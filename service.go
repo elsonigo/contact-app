@@ -76,5 +76,10 @@ func (cs *ContactService) Delete(contact *Contact) error {
 }
 
 func (cs *ContactService) Find(id string) (*Contact, error) {
-	return cs.repo.Find(id)
+	parsed, err := uuid.Parse(id)
+	if err != nil {
+		return nil, errors.New("invalid id provided")
+	}
+
+	return cs.repo.Find(parsed)
 }
