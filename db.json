@@ -4,23 +4,17 @@
     "email": "hans@mail.ch",
     "first": "Hans",
     "last": "Muster",
-    "phone": "071 123 45 67",
-    "errors": {
-      "email": "email error"
-    }
+    "phone": "071 123 45 67"
   },
   {
     "id": "89f1ea45-917d-468a-8cf7-37ee4f9fb173",
     "email": "peter@mail.ch",
     "first": "Peter",
     "last": "Stein",
-    "phone": "071 124 45 67",
-    "errors": {
-      "email": "email error"
-    }
+    "phone": "071 124 45 67"
   },
   {
-    "id": "4933a67f-486d-45ec-984c-36b80eba4cb4",
-    "email": "maria@muster.ch"
+    "id": "e9012e8a-0cf8-4c3b-b54b-28f520e1b823",
+    "email": "maria@mail.ch"
   }
 ]

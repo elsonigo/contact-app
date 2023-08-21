@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="static/style.css" />
   </head>
   <body>
+    {{ template "header" }} {{ if .Flash}}
+    <div class="flash">{{ .Flash }}</div>
+    {{end}}
     <main>{{ embed }}</main>
   </body>
 </html>

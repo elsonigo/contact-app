@@ -14,6 +14,8 @@ func main() {
 		Views: engine,
 	})
 
+	flash := NewFlash()
+
 	app.Static("/static", "./static")
 
 	db, err := OpenDatabase()
@@ -44,9 +46,12 @@ func main() {
 			foundContacts = all
 		}
 
+		f, _ := flash.Get(c)
+
 		return c.Render("contacts", fiber.Map{
 			"Contacts": foundContacts,
 			"Query":    query,
+			"Flash":    f,
 		}, "layouts/main")
 	})
 
@@ -64,12 +69,12 @@ func main() {
 
 		ct, err := db.Save(newContact)
 		if err != nil {
-			// implement flash message
-			// https://www.alexedwards.net/blog/simple-flash-messages-in-golang
 			return c.Render("new", fiber.Map{
 				"Contact": ct,
 			}, "layouts/main")
 		}
+
+		flash.Set(c, "new contact created")
 
 		return c.Redirect("/contacts")
 	})
