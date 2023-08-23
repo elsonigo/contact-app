@@ -9,9 +9,10 @@
       rel="stylesheet"
       href="https://the.missing.style/v0.2.0/missing.min.css"
     />
-    <link rel="stylesheet" href="static/style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/htmx.js"></script>
   </head>
-  <body>
+  <body hx-boost="true">
     {{ template "header" }} {{ if .Flash}}
     <div class="flash">{{ .Flash }}</div>
     {{end}}

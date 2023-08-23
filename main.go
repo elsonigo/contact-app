@@ -129,21 +129,21 @@ func main() {
 		return c.Redirect("/contacts")
 	})
 
-	app.Post("/contacts/:id/delete", func(c *fiber.Ctx) error {
+	app.Delete("/contacts/:id", func(c *fiber.Ctx) error {
 		contact := cs.Find(c.Params("id"))
 		if contact == nil {
-			return c.Redirect("/contacts")
+			return c.Redirect("/contacts", 303)
 		}
 
 		err = cs.Delete(contact)
 		if err != nil {
 			flash.Set(c, err.Error())
-			return c.Redirect("/contacts")
+			return c.Redirect("/contacts", 303)
 		}
 
 		flash.Set(c, "contact deleted")
 
-		return c.Redirect("/contacts")
+		return c.Redirect("/contacts", 303)
 	})
 
 	app.Listen(":3000")
