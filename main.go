@@ -50,6 +50,12 @@ func main() {
 			}
 
 			foundContacts = found
+
+			if c.Get("HX-Trigger") == "search" {
+				return c.Render("rows", fiber.Map{
+					"Contacts": foundContacts,
+				}, "")
+			}
 		}
 
 		if query == "" {

@@ -1,7 +1,24 @@
 {{ $length := len .Contacts }}
 <form action="/contacts" method="get" class="tool-bar">
   <label for="search">Search Term</label>
-  <input id="search" type="search" name="q" value="{{.Query}}" />
+  <input
+    id="search"
+    type="search"
+    name="q"
+    value="{{ .Query }}"
+    hx-get="/contacts"
+    hx-trigger="search, keyup delay:200ms changed"
+    hx-target="tbody"
+    hx-select="tbody tr"
+    hx-push-url="true"
+    hx-indicator="#spinner"
+  />
+  <img
+    style="height: 20px"
+    id="spinner"
+    class="htmx-indicator"
+    src="/static/spinning-circles.svg"
+  />
   <input type="submit" value="Search" />
 </form>
 
