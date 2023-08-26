@@ -12,5 +12,9 @@
     "first": "Peter",
     "last": "Stein",
     "phone": "071 124 45 67"
+  },
+  {
+    "id": "86db28e3-365e-407e-b716-549149b11a04",
+    "email": "asd2@asd.ch"
   }
 ]

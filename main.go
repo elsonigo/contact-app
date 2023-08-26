@@ -45,7 +45,7 @@ func main() {
 		}
 
 		if query == "" {
-			all, _ := cs.All()
+			all := cs.All()
 			foundContacts = all
 		}
 
@@ -144,6 +144,26 @@ func main() {
 		flash.Set(c, "contact deleted")
 
 		return c.Redirect("/contacts", 303)
+	})
+
+	app.Get("/contacts/:id/email", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+		if id == "" {
+			return c.Redirect("contacts")
+		}
+
+		contact := cs.Find(c.Params("id"))
+		if contact == nil {
+			return c.Redirect("contacts")
+		}
+
+		email := c.FormValue("email")
+		validationError := cs.ValidateEmail(email, contact.ID)
+		if validationError != nil {
+			return c.SendString(validationError.Error())
+		}
+
+		return nil
 	})
 
 	app.Listen(":3000")

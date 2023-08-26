@@ -58,12 +58,12 @@ func saveToFile(contacts []*domain.Contact) error {
 	return nil
 }
 
-func (db *JsonDatabase) All() ([]*domain.Contact, error) {
+func (db *JsonDatabase) All() []*domain.Contact {
 	if db.contacts == nil {
-		return nil, nil
+		return nil
 	}
 
-	return db.contacts, nil
+	return db.contacts
 }
 
 func (db *JsonDatabase) Search(q string) ([]*domain.Contact, error) {

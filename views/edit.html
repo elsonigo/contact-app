@@ -9,6 +9,9 @@
         type="text"
         placeholder="Email"
         value="{{ .Contact.Email }}"
+        hx-get="/contacts/{{ .Contact.ID }}/email"
+        hx-target="next .error"
+        hx-trigger="change, keyup delay:200ms changed"
       />
       <span class="error">{{ index .Contact.Errors "email" }}</span>
     </p>

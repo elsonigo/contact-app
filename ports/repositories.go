@@ -8,7 +8,7 @@ import (
 type ContactRepo interface {
 	Save(*domain.Contact) (*domain.Contact, error)
 	Update(*domain.Contact) (*domain.Contact, error)
-	All() ([]*domain.Contact, error)
+	All() []*domain.Contact
 	Search(string) ([]*domain.Contact, error)
 	Delete(*domain.Contact) error
 	Find(uuid.UUID) *domain.Contact

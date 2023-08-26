@@ -18,54 +18,51 @@ func NewContactService(repo ports.ContactRepo) *ContactService {
 	}
 }
 
-func (cs *ContactService) validate(contact *domain.Contact) *domain.Contact {
-	if contact.Email == "" {
-		contact.Errors = map[string]string{
-			"email": "Email required.",
-		}
-
-		return contact
+func (cs *ContactService) ValidateEmail(email string, id uuid.UUID) error {
+	if email == "" {
+		return errors.New("email required")
 	}
 
-	all, err := cs.repo.All()
-	if err != nil {
-		return nil
-	}
-
-	for _, c := range all {
-		if c.Email == contact.Email && c.ID != contact.ID {
-			contact.Errors = map[string]string{
-				"email": "Email already taken.",
-			}
+	for _, c := range cs.repo.All() {
+		if c.Email == email && c.ID != id {
+			return errors.New("email already taken")
 		}
 	}
 
-	return contact
+	return nil
 }
 
 func (cs *ContactService) Save(contact *domain.Contact) (*domain.Contact, error) {
 	contact.ID = uuid.New()
 
-	validated := cs.validate(contact)
+	validationError := cs.ValidateEmail(contact.Email, contact.ID)
 
-	if validated.Errors != nil {
-		return validated, errors.New("invalid contact")
+	if validationError != nil {
+		contact.Errors = map[string]string{
+			"email": validationError.Error(),
+		}
+
+		return contact, errors.New("invalid contact")
 	}
 
 	return cs.repo.Save(contact)
 }
 
 func (cs *ContactService) Update(contact *domain.Contact) (*domain.Contact, error) {
-	validated := cs.validate(contact)
+	validationError := cs.ValidateEmail(contact.Email, contact.ID)
 
-	if validated.Errors != nil {
-		return validated, errors.New("invalid contact")
+	if validationError != nil {
+		contact.Errors = map[string]string{
+			"email": validationError.Error(),
+		}
+
+		return contact, errors.New("invalid contact")
 	}
 
 	return cs.repo.Update(contact)
 }
 
-func (cs *ContactService) All() ([]*domain.Contact, error) {
+func (cs *ContactService) All() []*domain.Contact {
 	return cs.repo.All()
 }
 
