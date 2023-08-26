@@ -1,3 +1,4 @@
+{{ $length := len .Contacts }}
 <form action="/contacts" method="get" class="tool-bar">
   <label for="search">Search Term</label>
   <input id="search" type="search" name="q" value="{{.Query}}" />
@@ -17,10 +18,24 @@
     </tr>
   </thead>
   <tbody>
-    {{ range .Contacts}} {{ template "contact" .}} {{end}}
+    {{ range .Contacts}} {{ template "contact" .}} {{end}} {{ if and (eq $length
+    .PageSize) (gt .Max $length) }}
+    <tr>
+      <td colspan="5" style="text-align: center">
+        <button
+          hx-target="closest tr"
+          hx-swap="outerHTML"
+          hx-select="tbody > tr"
+          hx-get="/contacts?page={{ .Next }}"
+        >
+          Load More
+        </button>
+      </td>
+    </tr>
+    {{ end }}
   </tbody>
 </table>
-{{end}} {{ $length := len .Contacts }}
+{{end}}
 <div>
   {{ if gt .Page 1 }}
   <a href="/contacts?page={{ .Prev }}">Previous</a>

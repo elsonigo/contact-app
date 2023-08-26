@@ -28,5 +28,12 @@
     "errors": {
       "email": "email already taken"
     }
+  },
+  {
+    "id": "ecc2b8f2-7929-4cb3-b8c3-2f6871e3e457",
+    "email": "maria@mail.ch",
+    "first": "Maria",
+    "last": "Musterfrau",
+    "phone": "071 556 78 99"
   }
 ]

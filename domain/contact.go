@@ -12,4 +12,4 @@ type Contact struct {
 }
 
 // page size for pagination
-const PAGE_SIZE = 3
+const PAGE_SIZE = 2
