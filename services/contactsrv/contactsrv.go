@@ -66,6 +66,10 @@ func (cs *ContactService) All() []*domain.Contact {
 	return cs.repo.All()
 }
 
+func (cs *ContactService) Page(p int) []*domain.Contact {
+	return cs.repo.Page(p)
+}
+
 func (cs *ContactService) Search(s string) ([]*domain.Contact, error) {
 	return cs.repo.Search(s)
 }

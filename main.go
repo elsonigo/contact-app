@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strconv"
+
 	"github.com/elsonigo/contact-app/domain"
 	"github.com/elsonigo/contact-app/repositories/json_db"
 	"github.com/elsonigo/contact-app/services/contactsrv"
@@ -33,6 +35,12 @@ func main() {
 	app.Get("/contacts", func(c *fiber.Ctx) error {
 		foundContacts := []*domain.Contact{}
 
+		pageQuery := c.Query("page")
+		page, err := strconv.Atoi(pageQuery)
+		if err != nil {
+			page = 1
+		}
+
 		query := c.Query("q")
 		if query != "" {
 			found, err := cs.Search(query)
@@ -45,8 +53,8 @@ func main() {
 		}
 
 		if query == "" {
-			all := cs.All()
-			foundContacts = all
+			foundPage := cs.Page(page)
+			foundContacts = foundPage
 		}
 
 		f, _ := flash.Get(c)
@@ -55,6 +63,11 @@ func main() {
 			"Contacts": foundContacts,
 			"Query":    query,
 			"Flash":    f,
+			"Page":     page,
+			"Prev":     page - 1,
+			"Next":     page + 1,
+			"Max":      len(cs.All()),
+			"PageSize": domain.PAGE_SIZE,
 		})
 	})
 

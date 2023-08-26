@@ -15,6 +15,18 @@
   },
   {
     "id": "86db28e3-365e-407e-b716-549149b11a04",
-    "email": "asd2@asd.ch"
+    "email": "asd2@asd.ch",
+    "first": "Maria",
+    "last": "Muster"
+  },
+  {
+    "id": "7cba674a-0b01-4f7d-8a1a-c56fd842fb9e",
+    "email": "petra@mail.ch",
+    "first": "Petra",
+    "last": "Muster",
+    "phone": "012 123 45 66",
+    "errors": {
+      "email": "email already taken"
+    }
   }
 ]

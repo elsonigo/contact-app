@@ -20,8 +20,14 @@
     {{ range .Contacts}} {{ template "contact" .}} {{end}}
   </tbody>
 </table>
+{{end}} {{ $length := len .Contacts }}
+<div>
+  {{ if gt .Page 1 }}
+  <a href="/contacts?page={{ .Prev }}">Previous</a>
+  {{ end }} {{ if and (eq $length .PageSize) (gt .Max $length) }}
+  <a href="/contacts?page={{ .Next }}">Next</a> {{ end }}
+</div>
 
 <p>
   <a href="/contacts/new">Add Contact</a>
 </p>
-{{end}}

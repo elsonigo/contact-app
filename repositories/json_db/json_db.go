@@ -66,6 +66,22 @@ func (db *JsonDatabase) All() []*domain.Contact {
 	return db.contacts
 }
 
+func (db *JsonDatabase) Page(p int) []*domain.Contact {
+	if db.contacts == nil {
+		return nil
+	}
+
+	start := (p - 1) * domain.PAGE_SIZE
+	end := start + domain.PAGE_SIZE
+	max := len(db.contacts)
+
+	if end > max {
+		end = max
+	}
+
+	return db.contacts[start:end]
+}
+
 func (db *JsonDatabase) Search(q string) ([]*domain.Contact, error) {
 	if q == "" {
 		return nil, errors.New("no query string given")

@@ -10,3 +10,6 @@ type Contact struct {
 	Phone  string            `json:"phone,omitempty"`
 	Errors map[string]string `json:"errors,omitempty"`
 }
+
+// page size for pagination
+const PAGE_SIZE = 3
