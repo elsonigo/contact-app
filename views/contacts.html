@@ -62,4 +62,12 @@
 
 <p>
   <a href="/contacts/new">Add Contact</a>
+  <span hx-get="/contacts/count" hx-trigger="revealed">
+    <img
+      style="width: 1rem; margin-left: 0.5rem"
+      id="spinner"
+      class="htmx-indicator"
+      src="/static/spinning-circles.svg"
+    />
+  </span>
 </p>

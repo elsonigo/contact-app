@@ -2,6 +2,7 @@ package main
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/elsonigo/contact-app/domain"
 	"github.com/elsonigo/contact-app/repositories/json_db"
@@ -99,6 +100,14 @@ func main() {
 		flash.Set(c, "new contact created")
 
 		return c.Redirect("/contacts")
+	})
+
+	app.Get("/contacts/count", func(c *fiber.Ctx) error {
+		time.Sleep(time.Second * 2)
+		count := len(cs.All())
+		return c.Render("count", fiber.Map{
+			"Count": count,
+		}, "")
 	})
 
 	app.Get("/contacts/:id", func(c *fiber.Ctx) error {
